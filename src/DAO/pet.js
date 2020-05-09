@@ -37,6 +37,12 @@ class PetDao {
     const sql = `DELETE FROM Pet WHERE id=?`;
     executeQuery({ sql, values: [id] });
   }
+
+  static async getPetsByUser(userId) {
+    const sql = `SELECT * FROM Pet WHERE userId=?`;
+    const pets = await executeQuery({ sql, values: [userId] });
+    return pets;
+  }
 }
 
 module.exports = PetDao;
