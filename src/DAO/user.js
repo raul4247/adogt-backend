@@ -14,6 +14,12 @@ class UserDao {
     return user;
   }
 
+  static async getByEmail(email) {
+    const sql = `SELECT * FROM User WHERE email = ?`;
+    const [user] = await executeQuery({ sql, values: [email] });
+    return user;
+  }
+
   static async create(name, surname, email, cellphone, password) {
     const uuid = v4();
     const hashedPassword = await hashPassword(password); // hash password with bcrypt

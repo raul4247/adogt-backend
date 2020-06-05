@@ -2,6 +2,7 @@ const { Router } = require("express");
 const UserController = require("./controllers/user");
 const PetController = require("./controllers/pet");
 const ServiceController = require("./controllers/service");
+const passport = require("passport");
 
 const router = Router();
 // User Routes
@@ -10,6 +11,10 @@ router.get("/user/:id", UserController.getById);
 router.post("/user", UserController.create);
 router.put("/user/:id", UserController.update);
 router.delete("/user/:id", UserController.delete);
+router("/user/login").post(
+  passport.authenticate("local", { session: false }),
+  UserController.login
+);
 // Pet Routes
 router.get("/pet", PetController.list);
 router.get("/pet/:id", PetController.getById);

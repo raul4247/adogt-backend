@@ -1,6 +1,9 @@
 const UserDao = require("../DAO/user");
 
 class UserController {
+  static async login(req, res){
+    res.status(200).json();
+  }
   static async list(req, res) {
     try {
       const users = await UserDao.list();
@@ -42,7 +45,7 @@ class UserController {
       res.status(500).json();
     }
   }
-
+  
   static async update(req, res) {
     const { id } = req.params;
     const { name, surname, email, cellphone } = req.query;
