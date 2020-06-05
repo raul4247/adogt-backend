@@ -7,6 +7,7 @@ module.exports = async () => {
     \`name\` varchar(256) NOT NULL,
     \`surname\` varchar(45) NOT NULL,
     \`email\` varchar(256) NOT NULL,
+    \`password\` varchar(256) NOT NULL,
     \`cellphone\` varchar(256) NOT NULL,
     \`createdAt\` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (\`id\`),

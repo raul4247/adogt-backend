@@ -26,10 +26,17 @@ class UserController {
   }
 
   static async create(req, res) {
-    const { name, surname, email, cellphone } = req.query;
+    const { name, surname, email, cellphone, password } = req.query;
     try {
-      const id = await UserDao.create(name, surname, email, cellphone);
-      res.json({ id, name, surname, email, cellphone });
+      const { id, hashedPassword } = await UserDao.create(
+        name,
+        surname,
+        email,
+        cellphone,
+        password
+      );
+
+      res.json({ id, name, surname, email, cellphone, hashedPassword });
     } catch (err) {
       console.log(err);
       res.status(500).json();

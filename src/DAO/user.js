@@ -1,6 +1,6 @@
 const { v4 } = require("uuid");
 const { executeQuery } = require("../database/connection");
-
+const { hashPassword } = require("../configuration/security");
 class UserDao {
   static async list() {
     const sql = "SELECT * FROM User";
@@ -14,16 +14,17 @@ class UserDao {
     return user;
   }
 
-  static async create(name, surname, email, cellphone) {
+  static async create(name, surname, email, cellphone, password) {
     const uuid = v4();
-    const sql = `INSERT INTO User(id, name, surname, email, cellphone, createdAt) VALUES(?, ?, ?, ?, ?, current_timestamp())`;
+    const hashedPassword = await hashPassword(password); // hash password with bcrypt
+    const sql = `INSERT INTO User(id, name, surname, email, password, cellphone, createdAt) VALUES(?, ?, ?, ?, ?, ?, current_timestamp())`;
 
     await executeQuery({
       sql,
-      values: [uuid, name, surname, email, cellphone],
+      values: [uuid, name, surname, email, hashedPassword, cellphone],
     });
 
-    return uuid;
+    return { uuid, hashedPassword };
   }
 
   static async update(id, name, surname, email, cellphone) {
