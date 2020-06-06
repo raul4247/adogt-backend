@@ -1,12 +1,12 @@
 const UserDAO = require("../DAO/user");
 const bcrypt = require("bcrypt");
-const customPassport = require("passport");
+const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const BearerStrategy = require("passport-http-bearer");
 
 const jwt = require("jsonwebtoken");
 
-customPassport.use(
+passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
@@ -30,7 +30,7 @@ customPassport.use(
   )
 );
 
-customPassport.use(
+passport.use(
   new BearerStrategy(async (token, done) => {
     try {
       const payload = jwt.verify(token, "senha");
@@ -48,5 +48,29 @@ module.exports = {
     const token = jwt.sign(payload, "senha");
     return token;
   },
-  customPassport,
+  local: (req, res, next) => {
+    passport.authenticate("local", { session: false }, (err, user, info) => {
+      if (err) {
+        return res.status(401).json({ error: err.message });
+      }
+      if (!user) {
+        return res.status(401).json();
+      }
+      req.user = user;
+      return next();
+    })(req, res, next);
+  },
+  bearer: (req, res, next) => {
+    passport.authenticate("local", { session: false }, (err, user, info) => {
+      if (err && err.name === "JsonWebTokenError") {
+        return res.status(401).json({ error: err.message });
+      }
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      req.user = user;
+      return next();
+    })(req, res, next);
+  },
 };

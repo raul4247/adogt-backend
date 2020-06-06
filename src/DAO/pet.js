@@ -14,12 +14,13 @@ class PetDao {
     return pet;
   }
 
-  static async create(userId, name, age, breed, description, status) {
+  static async create(userId, name, age, breed, description) {
     const uuid = v4();
+
     const sql = `INSERT INTO Pet(id, userId, name, age, breed, description, createdAt, status) VALUES(?, ?, ?, ?, ?, ?, current_timestamp(), ?)`;
     await executeQuery({
       sql,
-      values: [uuid, userId, name, age, breed, description, status],
+      values: [uuid, userId, name, age, breed, description, "disponivel"],
     });
 
     return uuid;

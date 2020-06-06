@@ -26,17 +26,10 @@ class PetController {
   }
 
   static async create(req, res) {
-    const { userId, name, age, breed, description, status } = req.query;
+    const { userId, name, age, breed, description } = req.query;
     try {
-      const id = await PetDao.create(
-        userId,
-        name,
-        age,
-        breed,
-        description,
-        status
-      );
-      res.json({ id, userId, name, age, breed, description, status });
+      const id = await PetDao.create(userId, name, age, breed, description);
+      res.json({ id, userId, name, age, breed, description });
     } catch (err) {
       console.log(err);
       res.status(500).json();
