@@ -5,8 +5,7 @@ class UserController {
   static async login(req, res) {
     try {
       const token = await generateWebToken(req.user);
-      res.set("Authorization", token);
-      res.status(200).send();
+      res.status(200).json({ token: token });
     } catch (err) {
       res.status(401).send();
     }
@@ -35,8 +34,22 @@ class UserController {
     }
   }
 
+  static async getByEmail(req, res) {
+    const { email } = req.params;
+
+    try {
+      const user = await UserDao.getUserByEmail(email);
+      if (!user) return res.status(400).json();
+
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json();
+    }
+  }
+
   static async create(req, res) {
-    const { name, surname, email, cellphone, password } = req.query;
+    const { name, surname, email, cellphone, password } = req.body;
     try {
       const { id, hashedPassword } = await UserDao.create(
         name,
@@ -46,7 +59,14 @@ class UserController {
         password
       );
 
-      res.json({ id, name, surname, email, cellphone, hashedPassword });
+      res.json({
+        id,
+        name,
+        surname,
+        email,
+        cellphone,
+        password: hashedPassword,
+      });
     } catch (err) {
       console.log(err);
       res.status(500).json();

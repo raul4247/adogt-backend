@@ -17,7 +17,7 @@ connection.connect((err) => {
 });
 
 app = customExpress();
-const port = 4000;
+const port = 3000;
 app.listen(port, () => {
   console.log("Servidor rodando em: " + process.env.HOST + port);
 });

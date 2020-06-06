@@ -34,6 +34,7 @@ passport.use(
   new BearerStrategy(async (token, done) => {
     try {
       const payload = jwt.verify(token, "senha");
+      console.log(payload);
       const user = await UserDAO.getById(payload.id);
       done(null, user);
     } catch (err) {
@@ -61,12 +62,17 @@ module.exports = {
     })(req, res, next);
   },
   bearer: (req, res, next) => {
-    passport.authenticate("local", { session: false }, (err, user, info) => {
+    passport.authenticate("bearer", { session: false }, (err, user, info) => {
+      console.log(user);
       if (err && err.name === "JsonWebTokenError") {
         return res.status(401).json({ error: err.message });
       }
       if (err) {
         return res.status(500).json({ error: err.message });
+      }
+
+      if (!user) {
+        return res.status(401).json();
       }
 
       req.user = user;

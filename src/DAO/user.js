@@ -1,5 +1,6 @@
 const { v4 } = require("uuid");
 const { executeQuery } = require("../database/connection");
+const hashPassword = require("../configuration/hashPassword");
 class UserDao {
   static async list() {
     const sql = "SELECT * FROM User";
