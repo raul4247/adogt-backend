@@ -11,14 +11,19 @@ router.get("/user/:id", UserController.getById);
 router.post("/user", UserController.create);
 router.put("/user/:id", UserController.update);
 router.delete("/user/:id", UserController.delete);
-router("/user/login").post(
+router.post(
+  "/user/login",
   passport.authenticate("local", { session: false }),
   UserController.login
 );
 // Pet Routes
 router.get("/pet", PetController.list);
 router.get("/pet/:id", PetController.getById);
-router.post("/pet", PetController.create);
+router.post(
+  "/pet",
+  passport.authenticate("bearer", { session: false }),
+  PetController.create
+);
 router.put("/pet/:id", PetController.update);
 router.put("/pet/:id/description", PetController.updateDescription);
 router.put("/pet/:id/status", PetController.updateStatus);

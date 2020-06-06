@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const routes = require("../routes");
-const {customPassport} = require("./security") 
 
 module.exports = () => {
   const app = express();

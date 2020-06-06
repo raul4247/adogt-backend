@@ -1,6 +1,5 @@
 const { v4 } = require("uuid");
 const { executeQuery } = require("../database/connection");
-const { hashPassword } = require("../configuration/security");
 class UserDao {
   static async list() {
     const sql = "SELECT * FROM User";
@@ -14,7 +13,7 @@ class UserDao {
     return user;
   }
 
-  static async getByEmail(email) {
+  static async getUserByEmail(email) {
     const sql = `SELECT * FROM User WHERE email = ?`;
     const [user] = await executeQuery({ sql, values: [email] });
     return user;

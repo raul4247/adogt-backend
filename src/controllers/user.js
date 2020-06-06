@@ -1,8 +1,15 @@
 const UserDao = require("../DAO/user");
+const { generateWebToken } = require("../configuration/security");
 
 class UserController {
-  static async login(req, res){
-    res.status(200).json();
+  static async login(req, res) {
+    try {
+      const token = await generateWebToken(req.user);
+      res.set("Authorization", token);
+      res.status(200).send();
+    } catch (err) {
+      res.status(401).send();
+    }
   }
   static async list(req, res) {
     try {
@@ -45,7 +52,7 @@ class UserController {
       res.status(500).json();
     }
   }
-  
+
   static async update(req, res) {
     const { id } = req.params;
     const { name, surname, email, cellphone } = req.query;
