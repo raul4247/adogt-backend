@@ -16,7 +16,7 @@ class UserController {
       res.json(users);
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -25,12 +25,15 @@ class UserController {
 
     try {
       const user = await UserDao.getById(id);
-      if (!user) return res.status(400).json();
+      if (!user)
+        return res
+          .status(400)
+          .json({ error: "User with id " + id + " Not Found" });
 
       res.json(user);
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -39,12 +42,15 @@ class UserController {
 
     try {
       const user = await UserDao.getUserByEmail(email);
-      if (!user) return res.status(400).json();
+      if (!user)
+        return res
+          .status(400)
+          .json({ error: "User with id " + id + " Not Found" });
 
       res.json(user);
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -69,22 +75,25 @@ class UserController {
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
   static async update(req, res) {
     const { id } = req.params;
-    const { name, surname, email, cellphone } = req.query;
+    const { name, surname, email, cellphone } = req.body;
     try {
       const user = await UserDao.getById(id);
-      if (!user) return res.status(400).json();
+      if (!user)
+        return res
+          .status(400)
+          .json({ error: "User with id " + id + " Not Found" });
 
       await UserDao.update(id, name, surname, email, cellphone);
       res.json({ id, name, surname, email, cellphone });
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -92,13 +101,16 @@ class UserController {
     const { id } = req.params;
     try {
       const user = await UserDao.getById(id);
-      if (!user) return res.status(400).json();
+      if (!user)
+        return res
+          .status(400)
+          .json({ error: "User with id " + id + " Not Found" });
 
       await UserDao.delete(id);
       res.status(200).json();
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 }

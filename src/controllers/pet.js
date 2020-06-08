@@ -7,7 +7,7 @@ class PetController {
       res.json(pets);
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -16,47 +16,56 @@ class PetController {
 
     try {
       const pet = await PetDao.getById(id);
-      if (!pet) return res.status(400).json();
+      if (!pet)
+        return res
+          .status(400)
+          .json({ error: "Pet with id " + id + " Not Found" });
 
       res.json(pet);
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
   static async create(req, res) {
-    const { userId, name, age, breed, description } = req.query;
+    const { userId, name, age, breed, description } = req.body;
     try {
       const id = await PetDao.create(userId, name, age, breed, description);
       res.json({ id, userId, name, age, breed, description });
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
   static async update(req, res) {
     const { id } = req.params;
-    const { userId, name, age, breed, description, status } = req.query;
+    const { userId, name, age, breed, description, status } = req.body;
     try {
       const pet = await PetDao.getById(id);
-      if (!pet) return res.status(400).json();
+      if (!pet)
+        return res
+          .status(400)
+          .json({ error: "Pet with id " + id + " Not Found" });
 
       await PetDao.update(id, userId, name, age, breed, description, status);
       res.json({ id, userId, name, age, breed, description, status });
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
   static async updateDescription(req, res) {
     const { id } = req.params;
-    const { description } = req.query;
+    const { description } = req.body;
     try {
       const pet = await PetDao.getById(id);
-      if (!pet) return res.status(400).json();
+      if (!pet)
+        return res
+          .status(400)
+          .json({ error: "Pet with id " + id + " Not Found" });
 
       await PetDao.update(
         id,
@@ -79,16 +88,17 @@ class PetController {
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
   static async updateStatus(req, res) {
     const { id } = req.params;
-    const { status } = req.query;
+    const { status } = req.body;
     try {
       const pet = await PetDao.getById(id);
-      if (!pet) return res.status(400).json();
+      if (!pet)
+        return res.status(400).json({ error: "Pet with id" + " Not Found" });
 
       await PetDao.update(
         id,
@@ -111,7 +121,7 @@ class PetController {
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -119,13 +129,14 @@ class PetController {
     const { id } = req.params;
     try {
       const pet = await PetDao.getById(id);
-      if (!pet) return res.status(400).json();
+      if (!pet)
+        return res.status(400).json({ error: "Pet with id" + " Not Found" });
 
       await PetDao.delete(id);
       res.status(200).json();
     } catch (err) {
       console.log(err);
-      res.status(500).json();
+      res.status(500).json({ error: err.message });
     }
   }
 }
