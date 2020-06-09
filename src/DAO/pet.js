@@ -3,7 +3,7 @@ const { executeQuery } = require("../database/connection");
 
 class PetDao {
   static async list() {
-    const sql = "SELECT * FROM Pet";
+    const sql = "SELECT * FROM Pet WHERE status = 'disponivel'";
     const pets = await executeQuery(sql);
     return pets;
   }

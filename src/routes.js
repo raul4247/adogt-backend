@@ -16,7 +16,6 @@ router.delete("/user/:id", UserController.delete);
 router.post("/user/login", local, UserController.login);
 // Pet Routes
 router.get("/pet", PetController.list);
-router.get("/pet/:id", PetController.getById);
 router.post("/pet", PetController.create);
 router.put("/pet/:id", PetController.update);
 router.put("/pet/:id/description", PetController.updateDescription);

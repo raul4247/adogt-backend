@@ -5,6 +5,7 @@ class UserController {
   static async login(req, res) {
     try {
       const token = await generateWebToken(req.user);
+      console.log(req.user.email + " logado!!");
       res.status(200).json({ token: token });
     } catch (err) {
       res.status(401).send();
@@ -13,6 +14,7 @@ class UserController {
   static async list(req, res) {
     try {
       const users = await UserDao.list();
+      console.log("Lista de usuarios recuperados");
       res.json(users);
     } catch (err) {
       console.log(err);
@@ -30,6 +32,7 @@ class UserController {
           .status(400)
           .json({ error: "User with id " + id + " Not Found" });
 
+      console.log("Usuario Recuperado", user);
       res.json(user);
     } catch (err) {
       console.log(err);
@@ -47,6 +50,7 @@ class UserController {
           .status(400)
           .json({ error: "User with id " + id + " Not Found" });
 
+      console.log("Usuario Recuperado", user);
       res.json(user);
     } catch (err) {
       console.log(err);
@@ -65,6 +69,9 @@ class UserController {
         password
       );
 
+      console.log(
+        "Usuario Criado com: Id:" + id + " e senha:" + hashedPassword
+      );
       res.json({
         id,
         name,
@@ -90,6 +97,8 @@ class UserController {
           .json({ error: "User with id " + id + " Not Found" });
 
       await UserDao.update(id, name, surname, email, cellphone);
+
+      console.log("User updated:\n", id, name, surname, email, cellphone);
       res.json({ id, name, surname, email, cellphone });
     } catch (err) {
       console.log(err);
@@ -99,6 +108,7 @@ class UserController {
 
   static async delete(req, res) {
     const { id } = req.params;
+
     try {
       const user = await UserDao.getById(id);
       if (!user)
@@ -106,6 +116,7 @@ class UserController {
           .status(400)
           .json({ error: "User with id " + id + " Not Found" });
 
+      console.log(user.email + " Deleted!!");
       await UserDao.delete(id);
       res.status(200).json();
     } catch (err) {
